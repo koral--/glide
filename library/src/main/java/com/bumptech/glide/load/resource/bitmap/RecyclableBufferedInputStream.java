@@ -87,9 +87,12 @@ public class RecyclableBufferedInputStream extends FilterInputStream {
    */
   @Override
   public synchronized int available() throws IOException {
+    if (buf == null) {
+      return 0;
+    }
     // in could be invalidated by close().
     InputStream localIn = in;
-    if (buf == null || localIn == null) {
+    if (localIn == null) {
       throw streamClosed();
     }
     return count - pos + localIn.available();
